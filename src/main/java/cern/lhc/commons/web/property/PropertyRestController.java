@@ -4,7 +4,7 @@
 
 package cern.lhc.commons.web.property;
 
-import cern.lhc.chroma.server.rbac.RbacProtected;
+import cern.lhc.commons.web.rbac.RbacProtected;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

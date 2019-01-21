@@ -2,10 +2,15 @@
 <products>
 	<product name="lhc-commons-web" version="0.1.0" directory="lhc/commons/lhc-commons-web">
 		<dependencies>
+			<dep product="rbac-client" version="PRO" />
+
 			<dep product="spring-core" version="PRO" />
 			<dep product="spring-context" version="PRO" />
 			<dep product="spring-websocket" version="PRO" />
+			<dep product="spring-webmvc" version="PRO" />
 			<dep product="reactor-core" version="PRO" />
+
+			<dep product="tomcat-embed-core" version="9.0.12" local="true" />
 
 			<dep product="guava" version="PRO" />
 			<dep product="gson" version="PRO" />
