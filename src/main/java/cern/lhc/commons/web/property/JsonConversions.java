@@ -29,21 +29,10 @@ public final class JsonConversions {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T defaultDeserialization(String setValue, Class<T> clazz) {
-        if (clazz == Double.class) {
-            return (T) (Double) parseDouble(setValue);
-        } else if (clazz == String.class) {
-            return (T) setValue;
-        } else {
-            return gson().fromJson(setValue, clazz);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     public static <T> T defaultDeserialization(String setValue, Type type) {
-        if (type.getTypeName().equals(Double.class.getTypeName())) {
+        if (type == Double.class) {
             return (T) (Double) parseDouble(setValue);
-        } else if (type.getTypeName().equals(String.class.getTypeName())) {
+        } else if (type == String.class) {
             return (T) setValue;
         } else {
             return gson().fromJson(setValue, type);
