@@ -14,5 +14,4 @@ public interface Property<T> {
 
     Flux<T> asStream();
 
-    Class<? extends T> valueClass();
 }

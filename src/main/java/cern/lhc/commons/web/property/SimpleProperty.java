@@ -15,10 +15,8 @@ import static reactor.core.scheduler.Schedulers.elastic;
 public class SimpleProperty<T> implements Property<T> {
     private final AtomicReference<T> latestValue = new AtomicReference<>();
     private final ReplayProcessor<T> updateStream = ReplayProcessor.cacheLast();
-    private final Class<? extends T> valueClass;
 
-    SimpleProperty(Class<? extends T> valueClass, T initialValue) {
-        this.valueClass = valueClass;
+    SimpleProperty(T initialValue) {
         if (initialValue != null) {
             set(initialValue);
         }
@@ -41,8 +39,4 @@ public class SimpleProperty<T> implements Property<T> {
         return updateStream.publishOn(elastic()).onBackpressureDrop();
     }
 
-    @Override
-    public Class<? extends T> valueClass() {
-        return valueClass;
-    }
 }

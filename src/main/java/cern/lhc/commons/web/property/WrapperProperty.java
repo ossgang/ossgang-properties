@@ -15,10 +15,8 @@ public class WrapperProperty<T> implements Property<T> {
     private final AtomicReference<T> latestValue = new AtomicReference<>();
     private final Flux<T> updateStream;
     private final Consumer<T> consumer;
-    private final Class<? extends T> valueClass;
 
-    WrapperProperty(Class<? extends T> valueClass, Flux<T> stream, Consumer<T> consumer) {
-        this.valueClass = valueClass;
+    WrapperProperty(Flux<T> stream, Consumer<T> consumer) {
         this.updateStream = stream;
         this.consumer = consumer;
         stream.subscribe(latestValue::set);
@@ -39,8 +37,4 @@ public class WrapperProperty<T> implements Property<T> {
         return updateStream.publishOn(elastic()).onBackpressureDrop();
     }
 
-    @Override
-    public Class<? extends T> valueClass() {
-        return valueClass;
-    }
 }

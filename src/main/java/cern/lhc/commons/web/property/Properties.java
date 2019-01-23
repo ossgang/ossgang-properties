@@ -21,21 +21,16 @@ public class Properties {
         throw new UnsupportedOperationException("Static Only!");
     }
 
-    public static <T> Property<T> objectProperty(Class<? extends T> valueClass, T initialValue) {
-        return new SimpleProperty<>(valueClass, initialValue);
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <T> Property<T> objectProperty(T initialValue) {
-        return new SimpleProperty(initialValue.getClass(), initialValue);
+        return new SimpleProperty<>(initialValue);
     }
 
-    public static <T> Property<T> objectProperty(Class<? extends T> valueClass) {
-        return objectProperty(valueClass, null);
+    public static <T> Property<T> objectProperty() {
+        return objectProperty(null);
     }
 
     public static Property<Double> doubleProperty(double initialValue) {
-        return new SimpleProperty<>(Double.class, initialValue);
+        return new SimpleProperty<>(initialValue);
     }
 
     public static Property<Double> doubleProperty() {
@@ -43,7 +38,7 @@ public class Properties {
     }
 
     public static Property<Integer> intProperty(int initialValue) {
-        return new SimpleProperty<>(Integer.class, initialValue);
+        return new SimpleProperty<>(initialValue);
     }
 
     public static Property<Integer> intProperty() {
@@ -51,7 +46,7 @@ public class Properties {
     }
 
     public static Property<Boolean> booleanProperty(boolean initialValue) {
-        return new SimpleProperty<>(Boolean.class, initialValue);
+        return new SimpleProperty<>(initialValue);
     }
 
     public static Property<Boolean> booleanProperty() {
@@ -59,20 +54,20 @@ public class Properties {
     }
 
     public static Property<String> stringProperty(String initialValue) {
-        return new SimpleProperty<>(String.class, initialValue);
+        return new SimpleProperty<>(initialValue);
     }
 
     public static Property<String> stringProperty() {
         return stringProperty("");
     }
 
-    public static <T> Property<T> streamBackedProperty(Class<? extends T> valueClass, Flux<T> stream,
-            Consumer<T> consumer) {
-        return new WrapperProperty<>(valueClass, stream, consumer);
+    public static <T> Property<T> streamBackedProperty(Flux<T> stream,
+                                                       Consumer<T> consumer) {
+        return new WrapperProperty<>(stream, consumer);
     }
 
-    public static <S, D> Property<S> facadeProperty(Class<? extends S> valueClass, Property<D> destination,
-            Function<S, D> mapper, Function<D, S> reverseMapper) {
+    public static <S, D> Property<S> facadeProperty(Property<D> destination,
+                                                    Function<S, D> mapper, Function<D, S> reverseMapper) {
         return new Property<S>() {
 
             @Override
@@ -90,31 +85,27 @@ public class Properties {
                 return destination.asStream().map(reverseMapper);
             }
 
-            @Override
-            public Class<? extends S> valueClass() {
-                return valueClass;
-            }
         };
     }
 
     public static <D> Property<String> facadeStringProperty(Property<D> destination, Function<String, D> mapper,
-            Function<D, String> reverseMapper) {
-        return facadeProperty(String.class, destination, mapper, reverseMapper);
+                                                            Function<D, String> reverseMapper) {
+        return facadeProperty(destination, mapper, reverseMapper);
     }
 
     public static <D> Property<Double> facadeDoubleProperty(Property<D> destination, Function<Double, D> mapper,
-            Function<D, Double> reverseMapper) {
-        return facadeProperty(Double.class, destination, mapper, reverseMapper);
+                                                            Function<D, Double> reverseMapper) {
+        return facadeProperty(destination, mapper, reverseMapper);
     }
 
     public static <D> Property<Integer> facadeIntProperty(Property<D> destination, Function<Integer, D> mapper,
-            Function<D, Integer> reverseMapper) {
-        return facadeProperty(Integer.class, destination, mapper, reverseMapper);
+                                                          Function<D, Integer> reverseMapper) {
+        return facadeProperty(destination, mapper, reverseMapper);
     }
 
     public static <D> Property<Boolean> facadeBooleanProperty(Property<D> destination, Function<Boolean, D> mapper,
-            Function<D, Boolean> reverseMapper) {
-        return facadeProperty(Boolean.class, destination, mapper, reverseMapper);
+                                                              Function<D, Boolean> reverseMapper) {
+        return facadeProperty(destination, mapper, reverseMapper);
     }
 
     public static <S, D> void bind(Property<S> source, Property<D> destination, Function<S, D> mapper) {
@@ -132,7 +123,7 @@ public class Properties {
     }
 
     public static <S, D> void bindBidirectional(Property<S> source, Property<D> destination, Function<S, D> mapper,
-            Function<D, S> reverseMapper) {
+                                                Function<D, S> reverseMapper) {
         bind(source, destination, mapper);
         bind(destination, source, reverseMapper);
     }
