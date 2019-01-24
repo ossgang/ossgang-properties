@@ -5,16 +5,13 @@
 package cern.lhc.commons.web.property;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.ReplayProcessor;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static reactor.core.scheduler.Schedulers.elastic;
-
 public class SimpleProperty<T> implements Property<T> {
     private final AtomicReference<T> latestValue = new AtomicReference<>();
-    private final ReplayProcessor<T> updateStream = ReplayProcessor.cacheLast();
+    private final Sink<T> sink = Sink.createSink();
 
     SimpleProperty(T initialValue) {
         if (initialValue != null) {
@@ -29,14 +26,14 @@ public class SimpleProperty<T> implements Property<T> {
 
     @Override
     public void set(T value) {
-        if(!Objects.equals(latestValue.getAndSet(value), value)) {
-            updateStream.onNext(value);
+        if (!Objects.equals(latestValue.getAndSet(value), value)) {
+            sink.push(value);
         }
     }
 
     @Override
     public Flux<T> asStream() {
-        return updateStream.publishOn(elastic()).onBackpressureDrop();
+        return sink.asStream();
     }
 
 }
