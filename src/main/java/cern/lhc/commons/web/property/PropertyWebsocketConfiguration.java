@@ -30,9 +30,10 @@ public class PropertyWebsocketConfiguration {
             List<List<StreamWebsocketMapping>> bulkHandlers) {
         Stream<StreamWebsocketMapping> allHandlers = concat(handlers.stream(),
                 bulkHandlers.stream().flatMap(List::stream));
+
         return registry -> allHandlers.forEach(h -> {
             LOGGER.info("Mapping websocket handler for {}", h.path());
-            registry.addHandler(websocketFromStream(h.stream()), h.path());
+            registry.addHandler(websocketFromStream(h.stream().replay(1).autoConnect()), h.path());
         });
     }
 
