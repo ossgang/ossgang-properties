@@ -24,7 +24,7 @@ public class RestPropertyMapping<T> {
         this.deserialization = deserialization;
     }
 
-    public static <T> RestPropertyMappingBuilder<T> builder(Property<T> property) {
+    public static <T> RestPropertyMappingBuilder<T> mappingFor(Property<T> property) {
         return new RestPropertyMappingBuilder<>(property);
     }
 
@@ -36,7 +36,7 @@ public class RestPropertyMapping<T> {
             this.property = property;
         }
 
-        public RestPropertyMappingBuilder<T> mapTo(String path) {
+        public RestPropertyMappingBuilder<T> withPath(String path) {
             if (path == null || path.isEmpty()) {
                 throw new IllegalArgumentException("Path cannot be empty");
             }
