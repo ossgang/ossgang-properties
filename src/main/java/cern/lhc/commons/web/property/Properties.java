@@ -81,8 +81,8 @@ public class Properties {
             }
 
             @Override
-            public Flux<S> asStream() {
-                return destination.asStream().map(reverseMapper);
+            public Source<S> getSource() {
+                return Sources.sourceFrom(destination.asStream().map(reverseMapper));
             }
 
         };

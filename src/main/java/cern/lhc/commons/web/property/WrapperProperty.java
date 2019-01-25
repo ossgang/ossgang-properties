@@ -9,15 +9,13 @@ import reactor.core.publisher.Flux;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static reactor.core.scheduler.Schedulers.elastic;
-
 public class WrapperProperty<T> implements Property<T> {
     private final AtomicReference<T> latestValue = new AtomicReference<>();
-    private final Flux<T> updateStream;
+    private final Source<T> updateStream;
     private final Consumer<T> consumer;
 
     WrapperProperty(Flux<T> stream, Consumer<T> consumer) {
-        this.updateStream = stream;
+        this.updateStream = Sources.sourceFrom(stream);
         this.consumer = consumer;
         stream.subscribe(latestValue::set);
     }
@@ -33,8 +31,8 @@ public class WrapperProperty<T> implements Property<T> {
     }
 
     @Override
-    public Flux<T> asStream() {
-        return updateStream.publishOn(elastic()).onBackpressureDrop();
+    public Source<T> getSource() {
+        return updateStream;
     }
 
 }

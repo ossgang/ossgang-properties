@@ -12,6 +12,10 @@ public interface Property<T> {
 
     void set(T value);
 
-    Flux<T> asStream();
+    Source<T> getSource();
 
+    @Deprecated
+    default Flux<T> asStream() {
+        return getSource().asStream();
+    }
 }

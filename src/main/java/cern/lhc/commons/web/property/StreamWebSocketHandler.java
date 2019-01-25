@@ -1,6 +1,5 @@
 package cern.lhc.commons.web.property;
 
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
@@ -8,30 +7,33 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 public class StreamWebSocketHandler extends TextWebSocketHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StreamWebSocketHandler.class);
-    private static final Gson GSON = JsonConversions.gson();
     private static final String SESSION_STREAM_SUBSCRIPTION = "SESSION_STREAM_SUBSCRIPTION";
+    private static final Scheduler DEFAULT_SCHEDULER = Schedulers.elastic();
 
-    private final Flux<String> stream;
+    private final StreamWebsocketMapping<Object> mapping;
 
-    private StreamWebSocketHandler(Flux<String> stream) {
-        this.stream = stream;
+    private StreamWebSocketHandler(StreamWebsocketMapping<Object> mapping) {
+        this.mapping = mapping;
     }
 
-    public static StreamWebSocketHandler websocketFromStream(Flux<?> stream) {
-        return new StreamWebSocketHandler(stream.map(GSON::toJson));
+    public static StreamWebSocketHandler websocketFrom(StreamWebsocketMapping<Object> mapping) {
+        return new StreamWebSocketHandler(mapping);
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         LOGGER.info("Websocket connection {} initialized", session.getId());
-        Disposable subscription = stream //
-                .publishOn(Schedulers.elastic()) //
+        Disposable subscription = mapping //
+                .stream() //
+                .map(mapping.getSerialization()) //
+                .replay(1).autoConnect() // Replay the latest value for late subscribers!
+                .publishOn(DEFAULT_SCHEDULER) //
                 .subscribe(value -> sendMessage(session, value), e -> LOGGER.error("ERROR", e),
                         () -> LOGGER.info("COMPLETE !!"));
 

@@ -7,11 +7,13 @@ package cern.lhc.commons.web.property;
 import reactor.core.publisher.Flux;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SimpleProperty<T> implements Property<T> {
-    private final AtomicReference<T> latestValue = new AtomicReference<>();
-    private final Sink<T> sink = Sink.createSink();
+    private final Sink<T> sink = Sinks.createSink();
+
+    SimpleProperty() {
+        /* null initial value */
+    }
 
     SimpleProperty(T initialValue) {
         if (initialValue != null) {
@@ -21,19 +23,21 @@ public class SimpleProperty<T> implements Property<T> {
 
     @Override
     public T get() {
-        return latestValue.get();
+        return sink.getLatest();
     }
 
     @Override
     public void set(T value) {
-        if (!Objects.equals(latestValue.getAndSet(value), value)) {
-            sink.push(value);
+        synchronized (sink) {
+            if (!Objects.equals(sink.getLatest(), value)) {
+                sink.push(value);
+            }
         }
     }
 
     @Override
-    public Flux<T> asStream() {
-        return sink.asStream();
+    public Sink<T> getSource() {
+        return sink;
     }
 
 }
