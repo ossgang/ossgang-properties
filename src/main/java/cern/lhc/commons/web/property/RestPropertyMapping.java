@@ -28,6 +28,14 @@ public class RestPropertyMapping<T> {
         return new RestPropertyMappingBuilder<>(property);
     }
 
+    public Function<T, String> getSerialization() {
+        return serialization;
+    }
+
+    public Function<String, T> getDeserialization() {
+        return deserialization;
+    }
+
     public static class RestPropertyMappingBuilder<T> {
         private final Property<T> property;
         private String path;
@@ -67,7 +75,7 @@ public class RestPropertyMapping<T> {
 
     }
 
-    public Property<?> property() {
+    public Property<T> property() {
         return property;
     }
 

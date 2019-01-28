@@ -21,16 +21,19 @@ public class PropertyWebsocketConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyWebsocketConfiguration.class);
 
     @Bean
-    public List<StreamWebsocketMapping> propertyWebsockets(List<RestPropertyMapping<?>> restProperties) {
+    @SuppressWarnings("unchecked") /* safe because it is enforced in the RestPropertyMapping */
+    public List<StreamWebsocketMapping> propertyWebsockets(List<RestPropertyMapping> restProperties) {
         return restProperties.stream()
-                .map(r -> websocketMappingFrom(r.property().getSource()).withPath(PROPERTY_ENDPOINT + "/ws/" + r.path())
-                        .withDefaultSerialization())
+                .map(r -> websocketMappingFrom(r.property().getSource())
+                        .withPath(PROPERTY_ENDPOINT + "/ws/" + r.path())
+                        .withCustomSerialization(r.getSerialization())
+                )
                 .collect(toList());
     }
 
     @Bean
     public WebSocketConfigurer registerWebSocketHandlers(List<StreamWebsocketMapping> wsMappers,
-            List<List<StreamWebsocketMapping>> bulkWsMappers) {
+                                                         List<List<StreamWebsocketMapping>> bulkWsMappers) {
         Stream<StreamWebsocketMapping> allMappers = concat(wsMappers.stream(),
                 bulkWsMappers.stream().flatMap(List::stream));
 
