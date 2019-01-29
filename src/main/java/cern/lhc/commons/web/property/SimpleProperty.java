@@ -4,8 +4,6 @@
 
 package cern.lhc.commons.web.property;
 
-import reactor.core.publisher.Flux;
-
 import java.util.Objects;
 
 public class SimpleProperty<T> implements Property<T> {
