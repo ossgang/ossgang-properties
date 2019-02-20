@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <products>
-	<product name="lhc-commons-web" version="0.1.1" directory="lhc/commons/lhc-commons-web">
+	<product name="lhc-commons-web" version="0.1.2" directory="lhc/commons/lhc-commons-web">
 		<dependencies>
 			<dep product="rbac-client" version="PRO" />
 
