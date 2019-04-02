@@ -1,0 +1,3 @@
+include 'ossgang-properties-core'
+include 'ossgang-properties-web-server'
+include 'ossgang-properties-web-client'
