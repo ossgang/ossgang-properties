@@ -1,6 +1,8 @@
 package cern.lhc.commons.web.property;
 
 
+import io.github.ossgang.properties.core.Property;
+
 import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.function.Function;

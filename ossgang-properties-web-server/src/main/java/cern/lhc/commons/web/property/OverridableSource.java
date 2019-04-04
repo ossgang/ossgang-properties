@@ -1,5 +1,9 @@
 package cern.lhc.commons.web.property;
 
+import io.github.ossgang.properties.core.Property;
+import io.github.ossgang.properties.core.Sink;
+import io.github.ossgang.properties.core.Sinks;
+import io.github.ossgang.properties.core.Source;
 import reactor.core.publisher.Flux;
 
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package cern.lhc.commons.web.property;
+package io.github.ossgang.properties.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

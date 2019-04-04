@@ -1,5 +1,6 @@
 package cern.lhc.commons.web.property;
 
+import io.github.ossgang.properties.core.StreamBasedSource;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;

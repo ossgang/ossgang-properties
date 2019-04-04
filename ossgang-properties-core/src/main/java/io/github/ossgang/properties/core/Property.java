@@ -2,7 +2,7 @@
  * Copyright (c) 2018 European Organisation for Nuclear Research (CERN), All Rights Reserved.
  */
 
-package cern.lhc.commons.web.property;
+package io.github.ossgang.properties.core;
 
 import reactor.core.publisher.Flux;
 

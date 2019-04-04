@@ -4,6 +4,10 @@
 
 package cern.lhc.commons.web.property;
 
+import io.github.ossgang.properties.core.Property;
+import io.github.ossgang.properties.core.Sink;
+import io.github.ossgang.properties.core.Sinks;
+
 import java.util.Objects;
 
 public class SimpleProperty<T> implements Property<T> {

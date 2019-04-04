@@ -4,6 +4,8 @@
 
 package cern.lhc.commons.web.property;
 
+import io.github.ossgang.properties.core.Property;
+import io.github.ossgang.properties.core.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
