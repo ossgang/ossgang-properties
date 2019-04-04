@@ -1,4 +1,4 @@
-package cern.lhc.commons.web.property;
+package io.github.ossgang.properties.core;
 
 import io.github.ossgang.properties.core.StreamBasedSource;
 import reactor.core.publisher.Flux;
