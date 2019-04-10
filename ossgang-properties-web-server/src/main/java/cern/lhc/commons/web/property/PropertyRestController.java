@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(PropertyRestController.PROPERTY_ENDPOINT)
@@ -25,17 +27,17 @@ public class PropertyRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyRestController.class);
     public static final String PROPERTY_ENDPOINT = "properties";
 
-    @Autowired
+    @Autowired(required = false)
     private List<RestPropertyMapping> restProperties;
 
     @PostConstruct
     private void init() {
-        restProperties.forEach(mapping -> LOGGER.info("Mapped rest property {}", mapping.path()));
+        properties().forEach(mapping -> LOGGER.info("Mapped rest property {}", mapping.path()));
     }
 
     @GetMapping("{endpoint}")
     public String get(@PathVariable("endpoint") String endpoint) {
-        RestPropertyMapping property = restProperties.stream()
+        RestPropertyMapping property = properties().stream()
                 .filter(e -> e.path().equals(endpoint))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Property '" + endpoint + "' is unknown."));
@@ -45,7 +47,7 @@ public class PropertyRestController {
     @RbacProtected
     @PostMapping("{endpoint}")
     public void post(@PathVariable("endpoint") String endpoint, @RequestParam("value") String setValue) {
-        RestPropertyMapping property = restProperties.stream()
+        RestPropertyMapping property = properties().stream()
                 .filter(e -> e.path().equals(endpoint))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Property '" + endpoint + "' is unknown."));
@@ -53,4 +55,7 @@ public class PropertyRestController {
         property.deserializeAndSet(setValue);
     }
 
+    List<RestPropertyMapping> properties() {
+        return Optional.ofNullable(restProperties).orElse(Collections.emptyList());
+    }
 }
