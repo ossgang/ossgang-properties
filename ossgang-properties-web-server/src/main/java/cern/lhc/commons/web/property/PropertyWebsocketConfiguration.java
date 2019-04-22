@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import static com.google.common.collect.Streams.concat;
 import static java.util.stream.Collectors.toList;
 
 @Configuration
+@EnableWebSocket
 public class PropertyWebsocketConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyWebsocketConfiguration.class);
@@ -34,6 +36,8 @@ public class PropertyWebsocketConfiguration {
     @Bean
     public WebSocketConfigurer registerWebSocketHandlers(List<StreamWebsocketMapping> wsMappers,
                                                          List<List<StreamWebsocketMapping>> bulkWsMappers) {
+
+
         Stream<StreamWebsocketMapping> allMappers = concat(wsMappers.stream(),
                 bulkWsMappers.stream().flatMap(List::stream));
 
