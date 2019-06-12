@@ -2,11 +2,8 @@
  * Copyright (c) 2018 European Organisation for Nuclear Research (CERN), All Rights Reserved.
  */
 
-package cern.lhc.commons.web.property;
+package io.github.ossgang.properties.core;
 
-import io.github.ossgang.properties.core.Property;
-import io.github.ossgang.properties.core.Source;
-import io.github.ossgang.properties.core.Sources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
